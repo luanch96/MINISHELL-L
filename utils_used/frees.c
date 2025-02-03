@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   frees.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 12:38:17 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/03 00:36:22 by luisfederic      ###   ########.fr       */
+/*   Created: 2025/02/02 22:52:57 by luisfederic       #+#    #+#             */
+/*   Updated: 2025/02/03 00:07:33 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "minishell.h"
 
-int main(int argc, char **argv, char **env)
+void free_array(char **split_array)
 {
-    t_general general;
+    int j;
 
-    if(argc != 1 || argv[1])
+    j = 0;
+    while(split_array[j])
     {
-        printf("Program does not allow any arguments\n");
-        exit(0);
+        free(split_array[j++]);
     }
-    general.envp = ft_dupl_array(env);
-    look_pwd(&general);
-    setstart_tools(&general);
-
+    free(split_array);
 }
-
