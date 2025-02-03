@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:36:51 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/03 00:48:39 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/03 14:02:35 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int setstart_conf(t_general *general)
     general->stop_heredoc = 0;
     general->in_cmd = 0;
     general->in_cmd = 0;
-    
+    env_pars(general);
+    init_signals();
     return(1);
 }
