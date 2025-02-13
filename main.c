@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:38:17 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/03 14:02:01 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/13 13:33:54 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ int main(int argc, char **argv, char **env)
     general.envp = ft_dupl_array(env);
     look_pwd(&general);
     setstart_conf(&general);
+    loop(&general);
+    return(0);
 }
 

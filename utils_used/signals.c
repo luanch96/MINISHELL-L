@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 13:27:20 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/03 14:10:27 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/13 12:09:07 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,24 @@
 
 void handler_sigint(int sig)
 {
-    if(!s_general
-
-void handler_sigquit(int sig)
-{
-    
+    if(!g_global.in_heredoc)
+    {
+        ft_putstr_fd("\n", STDERR_FILENO);
+    }
+    if(g_global.in_cmd)
+    {
+        g_global.stop_heredoc = 1;
+        rl_replace_line(" ", 0);
+        rl_redisplay();
+        rl_done = 1;
+        return ;
+    }
+    rl_on_new_line();
+    rl_replace_line(" ", 0);
+    rl_redisplay();
+    (void) sig;
 }
+
 
 int event(void)
 {
@@ -55,9 +67,8 @@ específicamente a ciertos tipos de eventos que ocurran en la terminal.
 aplicaciones sobre cambios en el estado de la terminal, como cambios en el 
 cursor o la posición del cursor.*/
 
-/*### `event(void)`
-
-*   This is an empty function declared as `int` that returns 
+/*### `event(void)`*/
+/**   This is an empty function declared as `int` that returns 
 `EXIT_SUCCESS`.
 *   It seems that this function might have been intended to handle some 
 system event, but it doesn't actually do anything in the provided code.
@@ -106,5 +117,5 @@ typically triggered when you press Ctrl+C in a terminal) and `SIGQUIT`.
 When these signals are received, they print a message on standard error, 
 clear the current input line if necessary, or trigger a new newline. The 
 signal handling for `SIGQUIT` is set to ignore it instead of catching it 
-like `SIGINT`.
+like `SIGINT`.*/
 
