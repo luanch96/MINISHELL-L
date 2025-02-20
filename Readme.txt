@@ -15,7 +15,8 @@ Main
     4.1 int reset_comands(t_tools *tools)
     4.1.1 void comands_clear(t_comands **last)
     4.1.1.1 void clear_lexer(t_lexer **last)
-    4.2 int	count_tokens(char *s, int i, int tokens)
+    4.2 int tokens_count(char *line);
+    4.2.1 int look_quote(char *line, int i, int *num_prev, int num);
 
     
 

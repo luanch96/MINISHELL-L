@@ -6,82 +6,52 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 13:47:38 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/13 13:48:52 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/20 10:17:10 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//count how many tokens and if there are open quotes
-int	count_tokens(char *s, int i, int tokens)
-{
-	int		q[2];
+#include "minishell.h"
 
-	q[0] = 0;
-	q[1] = 0;
-	while (s[i])
+int look_quote(char *line, int i, int *num_prev, int num)
+{
+	int j;
+	
+	j = i + 1;
+	*num_prev += 1;
+	while(line[j] && line[j] != num)
 	{
-		if (!ft_strchr(" \t\n", s[i]))
-		{
-			tokens++;
-			while ((!ft_strchr(" \t\n", s[i]) || q[0]) && s[i])
-			{
-				if (!q[1] && (s[i] == '\"' || s[i] == '\''))
-					q[1] = s[i];
-				q[0] = (q[0] + (s[i] == q[1])) % 2;
-				q[1] *= q[0] != 0;
-				i++;
-			}
-			if (q[0])
-				return (-1);
-		}
-		else
-			i++;
+		j++;
 	}
-	return (tokens);
+	if(line[j] == num)
+	{
+		*num_prev += 1;
+	}
+	return (j - i);
 }
 
-
-
-//creates tokens within the array **tokens
-char	**quotes_tokenizer_aux(char **tokens, char	*s, int start, int tok)
+int tokens_count(char *line)
 {
-	int		i;
-	int		q[2];
+	int qs;
+	int qd;
+	int j;
 
-	q[0] = 0;
-	q[1] = 0;
-	i = 0;
-	while (s[i])
+	qs = 0;
+	qd = 0;
+	j = 0;
+	while(line[j])
 	{
-		while (ft_strchr(" \t\n", s[i]) && s[i])
-			i++;
-		start = i;
-		while ((!ft_strchr(" \t\n", s[i]) || q[0] || q[1]) && s[i])
+		if(line[j] == '\"')
 		{
-			q[0] = (q[0] + (!q[1] && s[i] == '\'')) % 2;
-			q[1] = (q[1] + (!q[0] && s[i] == '\"')) % 2;
-			i++;
+			j += look_quote(line, j, &qd, '\"');
 		}
-		if (!s[start])
-			tokens[tok++] = "\0";
-		else
-			tokens[tok++] = ft_substr(s, start, i - start);
+		if(line[j] == '\'')
+		{
+			j += look_quote(line, j, &qs, '\'');
+		}
 	}
-	return (tokens);
-}
-
-//tokenize taking quotes into account
-char	**quotes_tokenizer(char *input)
-{
-	char	**tokens;
-	int		nbr_tokens;
-
-	nbr_tokens = count_tokens(input, 0, 0);
-	if (nbr_tokens == -1)
-		return (NULL);
-	tokens = malloc(sizeof(char *) * (nbr_tokens + 1));
-	if (!tokens)
-		return (NULL);
-	tokens = quotes_tokenizer_aux(tokens, input, 0, 0);
-	tokens[nbr_tokens] = NULL;
-	return (tokens);
+	if((qs > 0 && qs % 2 != 0) || (qd > 0 && qd % 2 != 0))
+	{
+		return(0);
+	}
+	return(1);
 }

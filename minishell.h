@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:37:54 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/13 14:17:01 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/20 10:12:33 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ char	**quotes_tokenizer(char *input);
 
 char	**quotes_tokenizer_aux(char **tokens, char	*s, int start, int tok);
 
-int	count_tokens(char *s, int i, int tokens);
+int tokens_count(char *line);
+int look_quote(char *line, int i, int *num_prev, int num);
 
 #endif
