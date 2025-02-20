@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:37:15 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/03 00:08:22 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/20 12:34:20 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,3 +61,4 @@ char **ft_dupl_array(char **array)
     }
     return(dupl);
 }
+

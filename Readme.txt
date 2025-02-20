@@ -18,7 +18,3 @@ Main
     4.2 int tokens_count(char *line);
     4.2.1 int look_quote(char *line, int i, int *num_prev, int num);
 
-    
-
-        
-

@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:37:54 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/20 10:12:33 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/20 13:38:46 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,18 @@ typedef enum s_tokens
 {
 	PIPE = 1,
 	GREAT,
-	GREAT_GREAT,
+	D_GREAT,
 	LESS,
-	LESS_LESS,
+	D_LESS,
 }	t_tokens;
+
+typedef struct s_parser_tools
+{
+	t_lexer			*lexer_list;
+	t_lexer			*redirections;
+	int				num_redirections;
+	struct s_tools	*tools;
+}	t_parser_tools;
 
 typedef struct s_global
 {
@@ -115,5 +123,11 @@ char	**quotes_tokenizer_aux(char **tokens, char	*s, int start, int tok);
 
 int tokens_count(char *line);
 int look_quote(char *line, int i, int *num_prev, int num);
+
+int parser_token_error(t_general *general, t_lexer *lexer_list, t_tokens token);
+void clear_lexer(t_lexer **last);
+int ft_error(int error, t_general *general);
+
+void error_parsing(int error, t_general *general, t_lexer *list);
 
 #endif

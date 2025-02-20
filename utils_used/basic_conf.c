@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:36:51 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/13 13:59:29 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/20 10:42:25 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int loop(t_general *general)
     if(general->args[0] == '\0')
         return(reset_comands(general));
     add_history(general->args);
-    if(!count_quotes(general->args))
+    if(!tokens_count(general->args))
     {
         return(error(1, general));
     }

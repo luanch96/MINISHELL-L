@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:16:41 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/03 13:17:15 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/20 13:42:01 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,109 @@ int look_pwd(t_general *general)
             general->pwd = ft_substr(general->envp[j], 4, ft_strlen(general->envp[j]) - 4);
         }
         j++;
+    }
+}
+
+void count_pipes(t_lexer *lexer_list, t_general *general)
+{
+    t_lexer *temp;
+
+    temp = lexer_list;
+    general->pipes = 0;
+    while (temp)
+    {
+        if(temp->token == PIPE)
+        {
+            general->pipes++;
+        }
+        temp = temp->next;
+    }
+}
+
+void ft_lexer_delfirst(t_lexer **lst)
+{
+    t_lexer *node;
+
+    node = *lst;
+    *lst = node->next;
+    ft_lexer_delfirst(&node);
+    if(*lst)
+    {
+        (*lst)->prev = NULL;
+    }
+}
+
+void ft_lexer_reset (t_lexer **lst, int key)
+{
+    t_lexer *node;
+    t_lexer *prev_node;
+    t_lexer *start;
+
+    start = *lst;
+    node = start;
+    if((*lst)->i == key)
+    {
+        ft_lexer_delfirst(lst);
+        return ;
+    }
+    while(node && node->i != key)
+    {
+        prev_node = node;
+        node = node->next;
+    }
+    if(node)
+    {
+        prev_node->next = node->next;
+    }
+    else
+    {
+        prev_node->next = NULL;
+    }
+    if(prev_node->next)
+    {
+        prev_node->next->prev = prev_node;
+    }
+    ft_lexer_delfirst(&node);
+    *lst = start;
+}
+
+int handle_pipe_errors(t_general *general, t_tokens token)
+{
+    if(token == PIPE)
+    {
+        parser_token_error(general, general->lexer_list, general->lexer_list->token);
+        return(EXIT_FAILURE);
+    }
+    if(!general->lexer_list)
+    {
+        error_parsing(0, general, general->lexer_list);
+        return(EXIT_FAILURE);
+    }
+    return(EXIT_SUCCESS);
+}
+
+int parser(t_general *general)
+{
+    t_comands *node;
+    t_parser_tools parser_tools;
+
+    general->cmds = NULL;
+    count_pipes(general->lexer_list, general);
+    if(general->lexer_list->token == PIPE)
+    {
+        return(double_token_error(general, general->lexer_list, general->lexer_list->token));
+    }
+    while(general->lexer_list)
+    {
+        if(general->lexer_list && general->lexer_list->token == PIPE)
+        {
+            ft_lexer_reset(&general->lexer_list, general->lexer_list->i);
+        }
+        if(handle_pipe_errors(general, general->lexer_list, general)
+        {
+            return(EXIT_FAILURE);
+        }
+        parser_tools = INI
     }
 }
 
