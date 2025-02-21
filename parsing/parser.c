@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:16:41 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/21 11:44:37 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/21 12:54:34 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,91 @@ int handle_pipe_errors(t_general *general, t_tokens token)
     return(EXIT_SUCCESS);
 }
 
+t_parser_tools start_parser(t_lexer *list, t_general *general)
+{
+    t_parser_tools tool;
+
+    tool.lexer_list = list;
+    tool.redirections = NULL;
+    tool.num_redirections = 0;
+    tool.tools = tool;
+    return (tool);
+}
+
+void remove_redir(t_parser_tools *tool)
+{
+    t_lexer *temp;
+
+    temp = tool->lexer_list;
+    while (temp && temp->token == 0)
+    {
+        temp = temp->next;
+    }
+}
+
+int arg_count(t_lexer *list)
+{
+    t_lexer *temp;
+    int j;
+
+    j = 0;
+    temp = list;
+    while(temp && temp->token != PIPE)
+    {
+        if(temp->i >= 0)
+        {
+            j++;
+        }
+        temp = temp->next;
+    }
+    return(j);
+}
+
+t_comands *start_cmds(t_parser_tools *tool)
+{
+    int j;
+    int size_arg;
+    char **string;
+    t_lexer *temp;
+
+    j = 0;
+    remove_redir(tool);
+    size_arg = arg_count(tool->lexer_list);
+    string = ft_calloc(size_arg + 1, sizeof(char *));
+    if(!string)
+    {
+        error_parsing(1, tool->tools, tool->lexer_list);
+    }
+    temp = tool->lexer_list;
+    while(size_arg > 0)
+    {
+        if(temp->str)
+        {
+            string[j++] = ft_strdup(temp->str);
+            ft_lexer_reset(&tool->lexer_list, temp->i);
+            temp = tool->lexer_list;
+        }
+        size_arg--;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int parser(t_general *general)
 {
     t_comands *node;
@@ -126,11 +211,13 @@ int parser(t_general *general)
         {
             ft_lexer_reset(&general->lexer_list, general->lexer_list->i);
         }
-        if(handle_pipe_errors(general, general->lexer_list, general)
+        if(handle_pipe_errors(general, general->lexer_list->token))
         {
             return(EXIT_FAILURE);
         }
-        parser_tools = INI
+        parser_tools = start_parser(general->lexer_list, general);
+        node = start_cmds(&parser_tools);
+        if()
     }
 }
 

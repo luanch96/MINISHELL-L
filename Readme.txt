@@ -24,6 +24,13 @@ Main
     4.3.3.1 void ft_lexer_delfirst(t_lexer **lst);
     4.3.4 int handle_pipe_errors(t_general *general, t_tokens token);
     4.3.4.1 void error_parsing(int error, t_general *general, t_lexer *list);
+    
+    4.3.5 t_parser_tools start_parser(t_lexer *list, t_general *general)
+    4.3.6 t_comands *start_cmds(t_parser_tools *tool);
+    4.3.6.1 void remove_redir(t_parser_tools *tool);
+    4.3.6.2 int arg_count(t_lexer *list);
+
+
 
 
 
