@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:16:41 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/20 13:42:01 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/21 11:44:37 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int parser(t_general *general)
     count_pipes(general->lexer_list, general);
     if(general->lexer_list->token == PIPE)
     {
-        return(double_token_error(general, general->lexer_list, general->lexer_list->token));
+        return(parser_token_error(general, general->lexer_list, general->lexer_list->token));
     }
     while(general->lexer_list)
     {

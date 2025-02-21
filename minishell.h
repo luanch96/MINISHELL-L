@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:37:54 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/20 13:38:46 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/21 11:49:36 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,5 +129,9 @@ void clear_lexer(t_lexer **last);
 int ft_error(int error, t_general *general);
 
 void error_parsing(int error, t_general *general, t_lexer *list);
+void ft_lexer_reset (t_lexer **lst, int key);
+
+void ft_lexer_delfirst(t_lexer **lst);
+int handle_pipe_errors(t_general *general, t_tokens token);
 
 #endif
