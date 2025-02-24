@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:36:51 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/24 12:17:59 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/24 13:33:24 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,11 @@ int loop(t_general *general)
     add_history(general->args);
     if(!tokens_count(general->args))
     {
-        return(error(1, general));
+        return(error(2, general));
+    }
+    if(!token_reader(general))
+    {
+        return(ft_error(1, general))
     }
     parser(general);
     prepare_executor(general);

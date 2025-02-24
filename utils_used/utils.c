@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:37:15 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/20 12:34:20 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/24 14:01:00 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,3 +62,64 @@ char **ft_dupl_array(char **array)
     return(dupl);
 }
 
+int space(char x)
+{
+    return (x == ' ' || x == '\t' || 
+        x == '\n' || x == '\v' || x == '\f' || x == '\r');
+}
+
+int ignore_space(char *s, int i)
+{
+    int j;
+
+    j = 0;
+    while (space(s[i + j]))
+    {
+        j++;
+    }
+    return(j);
+}
+
+t_tokens is_token(int c)
+{
+    int i;
+
+    static int array_tokens[3][2] =
+    {
+        {'|', PIPE}, {'>', GREAT}, {'<', LESS}
+    };
+    
+    i = 0;
+    while(i < 3)
+    {
+        if(array_tokens[i][0] == c)
+        {
+            return(array_tokens[i][1]);
+        }
+        i++;
+    }
+    return(0);
+}
+
+int token_manage(char *s, t_lexer **list, int j)
+{
+    
+}
+
+void token_reader(t_general *general)
+{
+    int i;
+    int j;
+    
+    int i = 0;
+    int j = 0;
+    while(general->args[i])
+    {
+        j = 0;
+        i += ignore_space(general->args, i);
+        if(is_token(general->args[i]))
+        {
+            j = han
+        }
+    }
+}
