@@ -6,30 +6,11 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:16:41 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/21 12:54:34 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/24 12:07:03 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int look_pwd(t_general *general)
-{
-    int j;
-
-    j = 0;
-    while(general->envp[j])
-    {
-        if(!ft_strncmp(general->envp[j],"OLDPWD=", 7))
-        {
-            general->oldpwd = ft_substr(general->envp[j], 7, ft_strlen(general->envp[j]) - 7);
-        }
-        if(!ft_strncmp(general->envp[j], "PWD=", 4))
-        {
-            general->pwd = ft_substr(general->envp[j], 4, ft_strlen(general->envp[j]) - 4);
-        }
-        j++;
-    }
-}
 
 void count_pipes(t_lexer *lexer_list, t_general *general)
 {
@@ -47,67 +28,9 @@ void count_pipes(t_lexer *lexer_list, t_general *general)
     }
 }
 
-void ft_lexer_delfirst(t_lexer **lst)
-{
-    t_lexer *node;
-
-    node = *lst;
-    *lst = node->next;
-    ft_lexer_delfirst(&node);
-    if(*lst)
-    {
-        (*lst)->prev = NULL;
-    }
-}
-
-void ft_lexer_reset (t_lexer **lst, int key)
-{
-    t_lexer *node;
-    t_lexer *prev_node;
-    t_lexer *start;
-
-    start = *lst;
-    node = start;
-    if((*lst)->i == key)
-    {
-        ft_lexer_delfirst(lst);
-        return ;
-    }
-    while(node && node->i != key)
-    {
-        prev_node = node;
-        node = node->next;
-    }
-    if(node)
-    {
-        prev_node->next = node->next;
-    }
-    else
-    {
-        prev_node->next = NULL;
-    }
-    if(prev_node->next)
-    {
-        prev_node->next->prev = prev_node;
-    }
-    ft_lexer_delfirst(&node);
-    *lst = start;
-}
-
-int handle_pipe_errors(t_general *general, t_tokens token)
-{
-    if(token == PIPE)
-    {
-        parser_token_error(general, general->lexer_list, general->lexer_list->token);
-        return(EXIT_FAILURE);
-    }
-    if(!general->lexer_list)
-    {
-        error_parsing(0, general, general->lexer_list);
-        return(EXIT_FAILURE);
-    }
-    return(EXIT_SUCCESS);
-}
+/*In summary, this function simply counts the number of pipes in a given linked list of tokens and stores the 
+result in the `pipes` field of the `general` structure.
+*/
 
 t_parser_tools start_parser(t_lexer *list, t_general *general)
 {
@@ -149,50 +72,6 @@ int arg_count(t_lexer *list)
     return(j);
 }
 
-t_comands *start_cmds(t_parser_tools *tool)
-{
-    int j;
-    int size_arg;
-    char **string;
-    t_lexer *temp;
-
-    j = 0;
-    remove_redir(tool);
-    size_arg = arg_count(tool->lexer_list);
-    string = ft_calloc(size_arg + 1, sizeof(char *));
-    if(!string)
-    {
-        error_parsing(1, tool->tools, tool->lexer_list);
-    }
-    temp = tool->lexer_list;
-    while(size_arg > 0)
-    {
-        if(temp->str)
-        {
-            string[j++] = ft_strdup(temp->str);
-            ft_lexer_reset(&tool->lexer_list, temp->i);
-            temp = tool->lexer_list;
-        }
-        size_arg--;
-    }
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 int parser(t_general *general)
 {
@@ -205,7 +84,7 @@ int parser(t_general *general)
     {
         return(parser_token_error(general, general->lexer_list, general->lexer_list->token));
     }
-    while(general->lexer_list)
+    while(general->lexer_list) //parsing loop
     {
         if(general->lexer_list && general->lexer_list->token == PIPE)
         {
@@ -217,138 +96,66 @@ int parser(t_general *general)
         }
         parser_tools = start_parser(general->lexer_list, general);
         node = start_cmds(&parser_tools);
-        if()
-    }
-}
-
-
-/*is is a C function named `find_pwd` that appears to be part of a larger 
-program. The purpose of the function is to parse and extract environment 
-variables from a list (`envp`) stored in a struct (`tools`).
-
-Specifically, it checks each environment variable (`envp[i]`) in the list 
-and:
-
-1. If the variable starts with "PWD=" (4 characters), it extracts the 
-value starting from the 5th character (index 4) to the end of the string 
-and stores it in the `pwd` field of the `tools` struct.
-2. If the variable starts with "OLDPWD=" (7 characters), it extracts the 
-value starting from the 8th character (index 7) to the end of the string 
-and stores it in the `old_pwd` field of the `tools` struct.
-
-The function iterates over each environment variable, performs these 
-checks, and updates the corresponding fields of the `tools` struct. It 
-returns an integer value of 1 if any environment variables are 
-successfully parsed.
-
-In summary, this function is used to extract and store the current working 
-directory (`PWD`) and the previous working directory (`OLDPWD`) from a 
-list of environment variables.
-*/
-
-int env_pars(t_general *general)
-{
-    char *temp;
-    char *path;
-    int j;
-
-    j = 0;
-    path = check_path(general->envp);
-    general->paths = ft_split(path, ':');
-    free(path);
-
-    while(general->paths[j])
-    {
-        if(ft_strncmp(&general->paths[j][ft_strlen(general->paths[j]) - 1], "/", 1) != 0)
+        if(!node)
         {
-            temp = ft_strjoin(general->paths[j], "/");
-            free(general->paths[j]);
-            general->paths[j] = temp;
+            error_parsing(0, general, parser_tools.lexer_list);
         }
-        j++;
+        if (!general->cmds)
+        {
+            general->cmds = node;
+        }
+        else
+        {
+            add_comand_back(&general->cmds, node);
+        }
+        general->lexer_list = parser_tools.lexer_list;
     }
     return(EXIT_SUCCESS);
 }
 
-/*
-The function's purpose is to parse the environment 
-variable `envp` and manipulate its contents to create a list of paths.
+/* **Function purpose:**
+The `parser` function takes an argument `general`, which seems to represent the 
+current state of the shell or interpreter, and parses a sequence of commands from a 
+lexer.
 
-Here's a step-by-step breakdown of what the function does:
+**Initialization:**
 
-1. It retrieves the value of the `envp` environment variable using the 
-`find_path` function, which is not shown in this snippet.
-2. It splits the retrieved path into individual directories using the 
-`ft_split` function with a separator of `:`.
-3. It iterates over each directory in the list and checks if it ends with 
-a slash (`/`) character. If it does not end with a slash, it prepends an 
-additional slash to the directory name.
-4. After the iteration is complete, the modified list of directories is 
-stored in the `tools->paths` field of the `t_tools` struct.
+1. It initializes the `cmds` field of the `general` structure to `NULL`.
+2. It counts the number of pipes in the `lexer_list` using the `count_pipes` 
+function.
+3. If there's only one pipe, it returns an error code (`parser_token_error`) 
+indicating that the input is invalid.
 
-The purpose of this function seems to be to normalize the environment 
-variable `envp` by removing any trailing slashes and prepending them to 
-directories that are missing them. The final normalized list of paths is 
-then likely used elsewhere in the program.
+**Parsing loop:**
 
-Some potential improvements or alternative approaches:
+1. The function enters a loop that continues until all tokens in the `lexer_list` 
+have been processed.
+2. Inside the loop:
+	* If the current token is a pipe (`PIPE`), it resets the lexer position using `ft_l
+`ft_lexer_reset`.
+	* It calls the `handle_pipe_errors` function to handle any errors related to pipes.
+	* If an error occurs, the function returns an error code (`EXIT_FAILURE`) indicating 
+failure.
+	* The function calls `start_parser` to start parsing the next token in the lexer li
+list, passing in the current lexer position and the `general` structure as arguments.
+	* It stores the result of `start_parser` in a node variable named `node`.
+	* If `node` is `NULL`, it returns an error code (`EXIT_FAILURE`) indicating that pa
+parsing failed.
+	* The function adds the new node to the beginning of the `cmds` list using `add_com
+`add_comand_back`.
 
-* Instead of using `ft_strjoin` and manually freeing memory, consider 
-using a more modern C standard library function like `snprintf`.
-* Consider adding additional error checking or handling for cases where 
-`envp` is not set or contains invalid data.
-* If the `tools->paths` field is dynamically allocated memory (e.g., using 
-`malloc`), make sure to free it when no longer needed to avoid memory 
-leaks.
+**Final step:**
+
+1. After processing all tokens, the function updates the `lexer_list` field of the 
+`general` structure with the lexer position passed as an argument in the 
+`start_parser` call.
+2. The function returns a success code (`EXIT_SUCCESS`) indicating that parsing was 
+successful.*/
+
+
+/*In summary, this function is responsible for parsing a sequence of commands from a 
+lexer, handling errors related to pipes, and adding each parsed command to a linked 
+list (`cmds`).
 */
 
-char *check_path(char **env)
-{
-    int j;
 
-    j = 0;
-    while(env[j])
-    {
-        if(!ft_strncmp(env[j], "PATH=", 5))
-        {
-            return(ft_substr(env[j], 5, ft_strlen(env[j])) - 5);
-        }
-        j++;
-    }
-    return(ft_strdup("\0"));  //en caso de no encontrar Path, retorna String vacio.
-}
-
-/*The `find_path` function appears to be part of a custom string 
-manipulation library, specifically designed for working with environment 
-variables. Here's what it does:
-
-1. It takes a pointer to an array of strings (`char **envp`) as input.
-2. It iterates over each string in the array using a while loop.
-3. For each string, it checks if the string starts with the prefix "PATH=" 
-using `ft_strncmp`.
-4. If the string matches the prefix, it extracts the path value by taking 
-a substring starting from index 5 (since the prefix is 5 characters long) 
-up to the end of the string.
-5. The extracted path value is then returned as a new string using 
-`ft_substr`.
-6. If no matching "PATH=" prefix is found in the array, it returns a 
-duplicate copy of an empty string (`"\0"`) using `ft_strdup`.
-
-The purpose of this function seems to be to extract and return the value 
-of the environment variable `PATH`, which typically contains a 
-colon-separated list of directories where executable files are searched 
-for.
-
-Some observations about this implementation:
-
-* The use of `ft_strncmp` with a fixed-length prefix is an efficient way 
-to quickly identify the `PATH=` prefix.
-* The `ft_substr` function is used to extract the path value, which 
-suggests that this library provides a set of custom string manipulation 
-functions.
-* The return type of the function is `char *`, indicating that it returns 
-a pointer to a dynamically allocated string.
-
-Overall, this implementation appears to be designed for working with 
-environment variables and provides a convenient way to extract the `PATH` 
-value from an array of strings.*/

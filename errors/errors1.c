@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:13:48 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/20 13:38:37 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/24 11:58:11 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,19 @@ int parser_token_error(t_general *general, t_lexer *lexer_list, t_tokens token)
     clear_lexer(&lexer_list);
     reset_comands(general);
     return (EXIT_FAILURE);
+}
+
+int handle_pipe_errors(t_general *general, t_tokens token)
+{
+    if(token == PIPE)
+    {
+        parser_token_error(general, general->lexer_list, general->lexer_list->token);
+        return(EXIT_FAILURE);
+    }
+    if(!general->lexer_list)
+    {
+        error_parsing(0, general, general->lexer_list);
+        return(EXIT_FAILURE);
+    }
+    return(EXIT_SUCCESS);
 }

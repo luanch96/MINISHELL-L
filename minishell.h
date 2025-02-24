@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:37:54 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/21 12:31:10 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/24 11:56:50 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,9 @@ int handle_pipe_errors(t_general *general, t_tokens token);
 t_parser_tools start_parser(t_lexer *list, t_general *general);
 void remove_redir(t_parser_tools *tool);
 void arg_count(t_lexer *list);
+int parser(t_general *general);
+void add_comand_back(t_comands **lst, t_comands *new);
+void *lexer_clear(t_lexer **list);
+
 
 #endif
