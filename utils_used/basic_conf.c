@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 00:36:51 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/24 13:33:24 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/26 12:49:07 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int loop(t_general *general)
     }
     if(!token_reader(general))
     {
-        return(ft_error(1, general))
+        return(ft_error(1, general));
     }
     parser(general);
     prepare_executor(general);

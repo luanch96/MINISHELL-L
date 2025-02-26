@@ -22,7 +22,15 @@ Main
         4.3.1 int ignore_space(char *s, int i);
             4.3.1.1 int space(char x);
         4.3.2 t_tokens is_token(int c);
-        4.3.3 
+
+        4.3.3 int token_manage(char *s, t_lexer **list, int j):
+        4.3.3.1 int node_sum_empty(t_lexer **list, t_tokens tok, char *s);
+        4.3.3.1.1 t_lexer *lex_new(char *s, int tok);
+        4.3.3.1.2 void add_back(t_lexer **last, t_lexer *new);
+    
+        4.3.4 int words_reader(int i, char *s, t_lexer **list);
+        4.3.4.1 int quotes_manage(int i, char *s, char c);
+
     4.3 int parser(t_general *general);
     4.3.1 void count_pipes(t_lexer *lexer_list, t_general *general);
     4.3.2 int parser_token_error(t_general *general, t_lexer *lexer_list, t_tokens token);

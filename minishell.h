@@ -6,7 +6,7 @@
 /*   By: luisfederico <luisfederico@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:37:54 by luisfederic       #+#    #+#             */
-/*   Updated: 2025/02/24 13:57:13 by luisfederic      ###   ########.fr       */
+/*   Updated: 2025/02/26 13:17:48 by luisfederic      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int tokens_count(char *line);
 int look_quote(char *line, int i, int *num_prev, int num);
 
 
-void token_reader(t_general *general);
+int token_reader(t_general *general);
 int ignore_space(char *s, int i);
 int space(char x);
 t_tokens is_token(int c);
@@ -145,6 +145,9 @@ void arg_count(t_lexer *list);
 int parser(t_general *general);
 void add_comand_back(t_comands **lst, t_comands *new);
 void *lexer_clear(t_lexer **list);
-
+t_tokens token_check(int x);
+int quotes_manage(int i, char *s, char c);
+int token_manage(char *s, t_lexer **list, int j);
+int words_reader(int i, char *s, t_lexer **list);
 
 #endif
